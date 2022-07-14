@@ -1,11 +1,11 @@
 openapi: '3.0.2'
 info:
-  title: Participant Detail API
+  title: participantActivityHistory
   version: '1.0.0'
 servers:
   - url: https://api.server.test/v1
 paths:
-  /participantdetail:
+  /participantActivityHistory:
     get:
       x-amazon-apigateway-integration:
         type: aws_proxy
