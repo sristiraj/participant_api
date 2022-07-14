@@ -1,0 +1,82 @@
+openapi: '3.0.2'
+info:
+  title: Participant Detail API
+  version: '1.0.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /participantdetail:
+    get:
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        uri: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:541627396844:function:lambdaapicall/invocations
+        httpMethod: POST
+      parameters:
+        - name: ssn
+          in: query
+          required: true
+          schema:
+            type: string
+            default: abc
+          description: ssn of participant  
+        - name: pon
+          in: query
+          required: true
+          schema:
+            type: string
+            default: abc
+          description: PO number of participant  
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            default: 2022-05-04
+          description: Start Date
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            default: 2022-06-05
+          description: End Date         
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isBase64Encoded:
+                    type: boolean
+                    example: False
+                  statusCode: 
+                    type: integer
+                    example: 200
+                  body: 
+                    type: object
+                    properties:
+                      row: 
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            participant_id:
+                              type: string
+                              example: abc
+                            ssn:
+                              type: string
+                              example: 10223911
+                            employee:
+                              type: number
+                              example: 10223911
+                            automatic:
+                              type: number
+                              example: 10223911
+                            matching:
+                              type: number
+                              example: 10223911  
+                            row_total:
+                              type: number
+                              example: 10223911                                                                              
