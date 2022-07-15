@@ -48,7 +48,7 @@ def lambda_handler(event, context):
     client_redshift = session.client("redshift-data")
     print("Data API client successfully loaded")
     
-    query_str = "select  part_ssn, sum(employee_contribution) employee, sum(agency_automatic) automatic, sum(matching_dollar_contribution) matching, sum(row_total) row_total from {} where PART_SSN='{}'  group by part_ssn".format(table_name, query_string_params["ssn"])
+    query_str = "select  part_ssn, sum(employee_contribution) employee, sum(agency_automatic) automatic, sum(matching_dollar_contribution) matching, sum(row_total) row_total from {} where PART_SSN='{}'  group by part_ssn".format(table_name, dict(query_string_params)["ssn"])
                       
     print(query_str)
     
@@ -81,19 +81,20 @@ def lambda_handler(event, context):
     result = []
     
     for row in response["Records"]:
-        part_ssn = row[0][list(row[0].keys())[0]]
-        employee =   row[1][list(row[1].keys())[0]] if list(row[1].keys())[0]!="isNull" else "null"
-        automatic =  row[2][list(row[2].keys())[0]] if list(row[2].keys())[0]!="isNull" else "null"
-        matching =   row[3][list(row[3].keys())[0]] if list(row[3].keys())[0]!="isNull"  else "null"
-        row_tot =    row[4][list(row[4].keys())[0]] if list(row[4].keys())[0]!="isNull" else "null"
+        part_ssn = str(row[0][list(row[0].keys())[0]])
+        employee =   row[1][list(row[1].keys())[0]] if list(row[1].keys())[0]!="isNull" else "0"
+        automatic =  row[2][list(row[2].keys())[0]] if list(row[2].keys())[0]!="isNull" else "0"
+        matching =   row[3][list(row[3].keys())[0]] if list(row[3].keys())[0]!="isNull"  else "0"
+        row_tot =    row[4][list(row[4].keys())[0]] if list(row[4].keys())[0]!="isNull" else "0"
         result.append({"ssn":part_ssn,"employee":employee,"automatic":automatic,"matching":matching,"row_total":row_tot})
         
     response = {
         "isBase64Encoded":False,
         "statusCode": 200,
-        "body":{
+        "headers": {"Content-Type":"application/json"},
+        "body":json.dumps({
             "row": result
-        }
+        })
     }
     
     return response
