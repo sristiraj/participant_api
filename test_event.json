@@ -1,0 +1,7 @@
+{
+  "queryStringParameters": {
+    "ssn": "11",
+    "start_date": "2022-01-01",
+    "end_date": "2022-02-02"
+  }
+}
