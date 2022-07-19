@@ -93,7 +93,8 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "headers": {"Content-Type":"application/json"},
         "body":json.dumps({
-            "row": result
+            "row": result,
+            "nextToken": response["NextToken"]
         })
     }
     
